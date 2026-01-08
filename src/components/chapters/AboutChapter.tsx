@@ -1,86 +1,97 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function AboutChapter() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-20%' });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  // Reveal animations
+  const labelOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.15, 0.25], [60, 0]);
+  const bodyOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
+  const bodyY = useTransform(scrollYProgress, [0.2, 0.3], [40, 0]);
+  
+  // Exit animations
+  const contentOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0]);
   
   return (
-    <section id="about" ref={ref} className="chapter relative py-32 md:py-48">
-      {/* Spotlight */}
-      <div className="spotlight-purple absolute top-1/3 right-0 w-[600px] h-[400px]" />
-      
-      <div className="chapter-content">
-        <div className="max-w-4xl">
-          {/* Section label */}
+    <section 
+      ref={containerRef}
+      id="about"
+      className="relative min-h-[150vh]"
+    >
+      <div className="sticky top-0 h-screen flex items-center">
+        <motion.div 
+          style={{ opacity: contentOpacity }}
+          className="w-full max-w-4xl mx-auto px-6 md:px-12"
+        >
+          {/* Chapter label */}
           <motion.p
-            variants={fadeInUp}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ duration: 0.6 }}
-            className="caption text-muted-foreground mb-6"
+            style={{ opacity: labelOpacity }}
+            className="text-sm tracking-[0.3em] uppercase text-muted-foreground/60 mb-8"
           >
-            About
+            Philosophy
           </motion.p>
           
           {/* Main statement */}
           <motion.h2
-            variants={fadeInUp}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="headline-section mb-8"
+            style={{ opacity: titleOpacity, y: titleY }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1] mb-12"
           >
             Engineering for{' '}
-            <span className="gradient-text-subtle">reliability at scale.</span>
+            <span className="gradient-text-subtle">
+              reliability at scale.
+            </span>
           </motion.h2>
           
-          {/* Description */}
+          {/* Body text */}
           <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6 text-muted-foreground body-large max-w-2xl"
+            style={{ opacity: bodyOpacity, y: bodyY }}
+            className="max-w-2xl space-y-6"
           >
-            <p>
-              I'm a software engineer focused on backend systems, automation, and AI-powered tooling. My work centers on building infrastructure that teams depend on daily.
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+              I build backend systems, automation platforms, and AI-powered tools that teams depend on every day. My focus is on reducing toil and improving operational efficiency at scale.
             </p>
-            <p>
-              From incident management platforms to intelligent classification systems, I design solutions that reduce toil and improve operational efficiency across organizations.
+            
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+              From incident management to intelligent classification systems — I design infrastructure that's resilient, maintainable, and impactful.
             </p>
           </motion.div>
           
-          {/* Key highlights */}
+          {/* Stats */}
           <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8"
+            style={{ opacity: bodyOpacity }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mt-16"
           >
             {[
-              { value: '3+', label: 'Years Experience' },
-              { value: '10+', label: 'Production Systems' },
-              { value: '50K+', label: 'Tickets Automated' },
-              { value: '99.9%', label: 'System Uptime' },
+              { value: '3+', label: 'Years' },
+              { value: '10+', label: 'Systems' },
+              { value: '50K+', label: 'Automated' },
+              { value: '99.9%', label: 'Uptime' },
             ].map((stat, i) => (
-              <div key={i} className="text-center md:text-left">
-                <p className="text-3xl md:text-4xl font-semibold mb-1">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1 tracking-wide">
+                  {stat.label}
+                </p>
+              </motion.div>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
-      
-      {/* Gradient separator */}
-      <div className="gradient-separator absolute bottom-0 left-0 right-0" />
     </section>
   );
 }

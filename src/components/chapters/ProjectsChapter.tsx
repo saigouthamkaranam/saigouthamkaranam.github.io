@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Github, ExternalLink } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 
 const projects = [
   {
@@ -46,7 +46,7 @@ const projects = [
       'Real-time alerting system',
       'Multi-language support',
     ],
-    stack: ['React', 'Python', 'HuggingFace', 'Kafka', 'PostgreSQL'],
+    stack: ['React', 'Python', 'HuggingFace', 'Kafka'],
     github: '#',
     demo: '#',
   },
@@ -55,8 +55,8 @@ const projects = [
     description: 'Full-stack recipe sharing platform with personalized recommendations.',
     impact: [
       '5K+ active users',
-      'AI-powered recipe suggestions',
-      'Mobile-first responsive design',
+      'AI-powered suggestions',
+      'Mobile-first design',
     ],
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind'],
     github: '#',
@@ -64,80 +64,89 @@ const projects = [
   },
 ];
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
-
 export default function ProjectsChapter() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const labelOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0.08, 0.15], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.08, 0.15], [60, 0]);
   
   return (
-    <section id="projects" ref={ref} className="chapter relative py-32 md:py-48">
-      {/* Spotlight */}
-      <div className="spotlight-purple absolute top-1/4 right-1/4 w-[600px] h-[400px]" />
-      
-      <div className="chapter-content">
-        {/* Section header */}
+    <section 
+      ref={containerRef}
+      id="projects"
+      className="relative py-32 md:py-48"
+    >
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
+        {/* Chapter label */}
         <motion.p
-          variants={fadeInUp}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ duration: 0.6 }}
-          className="caption text-muted-foreground mb-6"
+          style={{ opacity: labelOpacity }}
+          className="text-sm tracking-[0.3em] uppercase text-muted-foreground/60 mb-8"
         >
           Work
         </motion.p>
         
+        {/* Title */}
         <motion.h2
-          variants={fadeInUp}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="headline-section mb-16 max-w-2xl"
+          style={{ opacity: titleOpacity, y: titleY }}
+          className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.1] mb-20 max-w-3xl"
         >
           Projects that{' '}
           <span className="gradient-text-subtle">deliver impact.</span>
         </motion.h2>
         
-        {/* Projects grid */}
-        <div className="space-y-8">
+        {/* Projects list */}
+        <div className="space-y-16 md:space-y-24">
           {projects.map((project, i) => (
             <motion.article
               key={project.title}
-              variants={fadeInUp}
-              initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
-              transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
-              className="premium-card group"
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-10%" }}
+              className="group relative"
             >
-              <div className="light-sweep" />
+              {/* Project number */}
+              <div className="absolute -left-4 md:-left-16 top-0 text-8xl md:text-9xl font-bold text-muted/20 select-none">
+                {String(i + 1).padStart(2, '0')}
+              </div>
               
-              <div className="relative z-10 grid md:grid-cols-[1fr,auto] gap-6 md:gap-12">
+              <div className="relative grid md:grid-cols-[1fr,auto] gap-8 md:gap-16">
                 {/* Content */}
-                <div>
-                  <h3 className="headline-feature mb-3 group-hover:text-white transition-colors">
+                <div className="space-y-6">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight group-hover:text-foreground transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground mb-6 max-w-xl">
+                  
+                  <p className="text-lg text-muted-foreground max-w-xl">
                     {project.description}
                   </p>
                   
                   {/* Impact bullets */}
-                  <ul className="space-y-2 mb-6">
+                  <ul className="space-y-2">
                     {project.impact.map((item, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="w-1 h-1 rounded-full bg-muted-foreground mt-2 shrink-0" />
-                        {item}
+                      <li 
+                        key={j} 
+                        className="flex items-center gap-3 text-muted-foreground"
+                      >
+                        <ArrowUpRight size={14} className="text-accent shrink-0" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                   
                   {/* Tech stack */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pt-2">
                     {project.stack.map((tech) => (
-                      <span key={tech} className="chip text-xs">
+                      <span 
+                        key={tech} 
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-secondary/30 text-muted-foreground border border-border/30"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -145,10 +154,10 @@ export default function ProjectsChapter() {
                 </div>
                 
                 {/* Links */}
-                <div className="flex md:flex-col gap-3 md:justify-center">
+                <div className="flex md:flex-col gap-4 items-start md:items-end md:justify-center">
                   <a
                     href={project.github}
-                    className="btn-secondary text-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground border border-border/50 hover:border-border transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -158,7 +167,7 @@ export default function ProjectsChapter() {
                   {project.demo && (
                     <a
                       href={project.demo}
-                      className="btn-primary text-sm"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-90 transition-opacity"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -168,13 +177,13 @@ export default function ProjectsChapter() {
                   )}
                 </div>
               </div>
+              
+              {/* Separator */}
+              <div className="mt-16 md:mt-24 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
             </motion.article>
           ))}
         </div>
       </div>
-      
-      {/* Gradient separator */}
-      <div className="gradient-separator absolute bottom-0 left-0 right-0" />
     </section>
   );
 }

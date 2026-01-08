@@ -13,10 +13,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 100);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -26,29 +23,20 @@ export default function Navigation() {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'py-4' : 'py-6'
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled ? 'py-3' : 'py-6'
         }`}
       >
-        <nav className="container mx-auto px-6 md:px-8">
-          <div
-            className={`flex items-center justify-between transition-all duration-300 ${
-              isScrolled
-                ? 'glass-panel px-6 py-3 border border-border'
-                : ''
-            }`}
-          >
-            {/* Logo */}
-            <a
-              href="#"
-              className="text-lg font-semibold hover:opacity-80 transition-opacity"
-            >
+        <nav className="max-w-6xl mx-auto px-6 md:px-12">
+          <div className={`flex items-center justify-between transition-all duration-500 ${
+            isScrolled ? 'glass-panel px-6 py-3' : ''
+          }`}>
+            <a href="#" className="text-lg font-semibold tracking-tight hover:opacity-70 transition-opacity">
               Goutham
             </a>
 
-            {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-10">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -62,16 +50,15 @@ export default function Navigation() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary text-sm py-2"
+                className="px-5 py-2 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-90 transition-opacity"
               >
                 Resume
               </a>
             </div>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-foreground"
+              className="md:hidden p-2"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -80,41 +67,36 @@ export default function Navigation() {
         </nav>
       </motion.header>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-xl md:hidden flex flex-col items-center justify-center gap-8"
           >
-            <div className="flex flex-col items-center justify-center h-full gap-8">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-medium hover:text-muted-foreground transition-colors"
-                >
-                  {link.label}
-                </motion.a>
-              ))}
+            {navLinks.map((link, i) => (
               <motion.a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                key={link.href}
+                href={link.href}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="btn-primary mt-4"
+                transition={{ delay: i * 0.1 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-3xl font-medium"
               >
-                Resume
+                {link.label}
               </motion.a>
-            </div>
+            ))}
+            <motion.a
+              href="/resume.pdf"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="px-8 py-3 rounded-full font-medium bg-foreground text-background mt-4"
+            >
+              Resume
+            </motion.a>
           </motion.div>
         )}
       </AnimatePresence>
