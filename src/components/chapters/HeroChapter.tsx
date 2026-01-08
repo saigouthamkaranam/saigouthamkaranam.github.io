@@ -1,97 +1,87 @@
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function HeroChapter() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+  
+  // Typography animations tied to scroll
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.3, 0.5], [1, 1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+  const subtitleOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [0, 1, 0]);
+  const subtitleY = useTransform(scrollYProgress, [0, 0.2, 0.5], [50, 0, -50]);
+  
   return (
-    <section className="chapter relative">
-      {/* Spotlight effect */}
-      <div className="spotlight absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px]" />
-      
-      <div className="chapter-content flex flex-col items-start justify-center min-h-screen py-20">
-        <div className="max-w-3xl">
-          {/* Caption */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="caption text-muted-foreground mb-6"
-          >
-            Software Engineer
-          </motion.p>
-          
-          {/* Main headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="headline-hero mb-8"
-          >
-            <span className="gradient-text-subtle">Goutham.</span>
-          </motion.h1>
-          
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="body-large text-muted-foreground max-w-xl mb-10"
-          >
-            Building scalable systems, automation platforms, and intelligent products that power enterprises.
-          </motion.p>
-          
-          {/* Focus areas */}
+    <section 
+      ref={containerRef}
+      id="hero"
+      className="relative min-h-[200vh]"
+    >
+      {/* Sticky content container */}
+      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/50 pointer-events-none" />
+        
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-12 text-center">
+          {/* Main title - massive Apple-style */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-wrap gap-3 mb-12"
+            style={{ opacity: titleOpacity, y: titleY }}
+            className="mb-8"
           >
-            {['Backend Engineering', 'AI Automation', 'Cloud Infrastructure', 'System Design'].map((area, i) => (
-              <span key={area} className="chip">
-                {area}
-              </span>
-            ))}
-          </motion.div>
-          
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-wrap gap-4"
-          >
-            <a href="#projects" className="btn-primary">
-              View Projects
-            </a>
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary"
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="text-sm md:text-base font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6"
             >
-              Resume
-            </a>
+              Software Engineer
+            </motion.p>
+            
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-tight"
+            >
+              <span className="gradient-text-subtle">Goutham</span>
+            </motion.h1>
           </motion.div>
+          
+          {/* Subtitle - reveals on scroll */}
+          <motion.p
+            style={{ opacity: subtitleOpacity, y: subtitleY }}
+            className="text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto font-light tracking-tight"
+          >
+            Engineering systems that scale.
+            <br />
+            Building automation that matters.
+          </motion.p>
         </div>
-      </div>
-      
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.a
-          href="#about"
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+        
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2"
         >
-          <span className="caption text-xs">Scroll</span>
-          <ChevronDown size={16} />
-        </motion.a>
-      </motion.div>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-3"
+          >
+            <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground/60">
+              Scroll to explore
+            </span>
+            <div className="w-px h-12 bg-gradient-to-b from-muted-foreground/40 to-transparent" />
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }

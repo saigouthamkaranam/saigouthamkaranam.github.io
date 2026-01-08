@@ -1,114 +1,112 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Code2, Cloud, Database, Brain } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
-const skillCategories = [
+const skills = [
   {
-    icon: Code2,
-    title: 'Backend',
-    description: 'Building robust APIs and services',
-    skills: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Node.js'],
+    category: 'Backend',
+    items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Node.js'],
+    description: 'Building robust APIs and microservices',
   },
   {
-    icon: Cloud,
-    title: 'Cloud & Infrastructure',
-    description: 'Deploying and scaling systems',
-    skills: ['AWS', 'Azure', 'Docker', 'Kubernetes', 'Terraform'],
+    category: 'Cloud & Infra',
+    items: ['AWS', 'Azure', 'Docker', 'Kubernetes', 'Terraform'],
+    description: 'Deploying and scaling distributed systems',
   },
   {
-    icon: Database,
-    title: 'Data',
-    description: 'Managing and processing data',
-    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Kafka', 'SQL'],
+    category: 'Data',
+    items: ['PostgreSQL', 'MongoDB', 'Redis', 'Kafka', 'SQL'],
+    description: 'Managing data at scale',
   },
   {
-    icon: Brain,
-    title: 'AI & Automation',
-    description: 'Intelligent systems and workflows',
-    skills: ['LLM APIs', 'LangChain', 'ML Basics', 'Pandas', 'Automation'],
+    category: 'AI & ML',
+    items: ['LLM APIs', 'LangChain', 'Pandas', 'scikit-learn'],
+    description: 'Intelligent automation and tooling',
   },
 ];
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
-
 export default function SkillsChapter() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  // Animations
+  const labelOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.15, 0.25], [60, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0]);
   
   return (
-    <section id="skills" ref={ref} className="chapter relative py-32 md:py-48">
-      {/* Spotlight */}
-      <div className="spotlight absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[500px]" />
-      
-      <div className="chapter-content">
-        {/* Section header */}
-        <motion.p
-          variants={fadeInUp}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ duration: 0.6 }}
-          className="caption text-muted-foreground mb-6"
+    <section 
+      ref={containerRef}
+      id="skills"
+      className="relative min-h-[180vh]"
+    >
+      <div className="sticky top-0 min-h-screen flex items-center py-20">
+        <motion.div 
+          style={{ opacity: contentOpacity }}
+          className="w-full max-w-6xl mx-auto px-6 md:px-12"
         >
-          Expertise
-        </motion.p>
-        
-        <motion.h2
-          variants={fadeInUp}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="headline-section mb-16 max-w-2xl"
-        >
-          The stack behind{' '}
-          <span className="gradient-text-subtle">the systems.</span>
-        </motion.h2>
-        
-        {/* Skills grid - Apple feature tiles style */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {skillCategories.map((category, i) => (
-            <motion.div
-              key={category.title}
-              variants={fadeInUp}
-              initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
-              transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
-              className="premium-card group"
-            >
-              {/* Light sweep effect */}
-              <div className="light-sweep" />
-              
-              <div className="relative z-10">
-                {/* Icon */}
-                <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center mb-6">
-                  <category.icon size={24} className="text-foreground" />
+          {/* Chapter label */}
+          <motion.p
+            style={{ opacity: labelOpacity }}
+            className="text-sm tracking-[0.3em] uppercase text-muted-foreground/60 mb-8"
+          >
+            Expertise
+          </motion.p>
+          
+          {/* Title */}
+          <motion.h2
+            style={{ opacity: titleOpacity, y: titleY }}
+            className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.1] mb-16 max-w-3xl"
+          >
+            The stack behind{' '}
+            <span className="gradient-text-subtle">the systems.</span>
+          </motion.h2>
+          
+          {/* Skills grid */}
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+            {skills.map((skill, i) => (
+              <motion.div
+                key={skill.category}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                viewport={{ once: true, margin: "-10%" }}
+                className="group"
+              >
+                {/* Category header */}
+                <div className="mb-4">
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
+                    {skill.category}
+                  </h3>
+                  <p className="text-muted-foreground text-sm md:text-base">
+                    {skill.description}
+                  </p>
                 </div>
                 
-                {/* Title & description */}
-                <h3 className="headline-feature mb-2">{category.title}</h3>
-                <p className="text-muted-foreground mb-6">{category.description}</p>
-                
-                {/* Skills */}
+                {/* Skills list */}
                 <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1.5 rounded-full text-sm bg-secondary/50 text-muted-foreground"
+                  {skill.items.map((item, j) => (
+                    <motion.span
+                      key={item}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.1 + j * 0.05, duration: 0.4 }}
+                      viewport={{ once: true }}
+                      className="px-4 py-2 rounded-full text-sm font-medium bg-secondary/50 text-muted-foreground border border-border/50 hover:border-border hover:text-foreground transition-colors"
                     >
-                      {skill}
-                    </span>
+                      {item}
+                    </motion.span>
                   ))}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
-      
-      {/* Gradient separator */}
-      <div className="gradient-separator absolute bottom-0 left-0 right-0" />
     </section>
   );
 }
