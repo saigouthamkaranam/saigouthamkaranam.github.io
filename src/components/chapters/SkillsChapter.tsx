@@ -1,6 +1,8 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
+import { useInView } from '@/hooks/use-in-view';
+import { prefersReducedMotion } from '@/lib/motion';
+import SkillsScene from '@/components/scene/microscene/SkillsScene';
 const skills = [
   {
     category: 'Backend',
@@ -26,6 +28,8 @@ const skills = [
 
 export default function SkillsChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [sceneRef, isInView] = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const reducedMotion = typeof window !== 'undefined' && prefersReducedMotion();
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -44,6 +48,15 @@ export default function SkillsChapter() {
       id="skills"
       className="relative min-h-[180vh]"
     >
+      {/* 3D Micro-scene */}
+      <div ref={sceneRef} className="absolute left-0 top-1/3 w-1/4 h-1/2 opacity-50 pointer-events-none hidden lg:block">
+        {!reducedMotion && (
+          <Suspense fallback={null}>
+            <SkillsScene scrollProgress={scrollYProgress.get()} inView={isInView} />
+          </Suspense>
+        )}
+      </div>
+      
       <div className="sticky top-0 min-h-screen flex items-center py-20">
         <motion.div 
           style={{ opacity: contentOpacity }}

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { useLenis } from '@/hooks/use-lenis';
 import Navigation from '@/components/Navigation';
 import ProductScene from '@/components/scene/ProductScene';
+import AmbientScene from '@/components/scene/AmbientScene';
 import HeroChapter from '@/components/chapters/HeroChapter';
 import AboutChapter from '@/components/chapters/AboutChapter';
 import SkillsChapter from '@/components/chapters/SkillsChapter';
@@ -11,7 +12,6 @@ import ContactChapter from '@/components/chapters/ContactChapter';
 import FooterMinimal from '@/components/FooterMinimal';
 
 const Index = () => {
-  // Initialize smooth scroll
   useLenis();
 
   return (
@@ -19,7 +19,12 @@ const Index = () => {
       {/* Grain texture overlay */}
       <div className="grain-overlay" />
       
-      {/* 3D Scene - fixed background */}
+      {/* Ambient 3D layer - persistent background */}
+      <Suspense fallback={null}>
+        <AmbientScene />
+      </Suspense>
+      
+      {/* Main 3D Scene - hero object */}
       <Suspense fallback={null}>
         <ProductScene />
       </Suspense>

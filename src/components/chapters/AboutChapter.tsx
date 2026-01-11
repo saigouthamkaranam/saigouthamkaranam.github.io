@@ -1,8 +1,13 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useInView } from '@/hooks/use-in-view';
+import { prefersReducedMotion } from '@/lib/motion';
+import AboutScene from '@/components/scene/microscene/AboutScene';
 
 export default function AboutChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [sceneRef, isInView] = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const reducedMotion = typeof window !== 'undefined' && prefersReducedMotion();
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -25,6 +30,15 @@ export default function AboutChapter() {
       id="about"
       className="relative min-h-[150vh]"
     >
+      {/* 3D Micro-scene */}
+      <div ref={sceneRef} className="absolute right-0 top-1/4 w-1/3 h-1/2 opacity-60 pointer-events-none hidden lg:block">
+        {!reducedMotion && (
+          <Suspense fallback={null}>
+            <AboutScene inView={isInView} />
+          </Suspense>
+        )}
+      </div>
+      
       <div className="sticky top-0 h-screen flex items-center">
         <motion.div 
           style={{ opacity: contentOpacity }}
