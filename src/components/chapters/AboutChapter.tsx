@@ -30,8 +30,8 @@ export default function AboutChapter() {
       id="about"
       className="relative min-h-[150vh]"
     >
-      {/* 3D Micro-scene */}
-      <div ref={sceneRef} className="absolute right-0 top-1/4 w-1/3 h-1/2 opacity-60 pointer-events-none hidden lg:block">
+      {/* 3D Micro-scene - Full section background */}
+      <div ref={sceneRef} className="absolute inset-0 opacity-80 pointer-events-none">
         {!reducedMotion && (
           <Suspense fallback={null}>
             <AboutScene inView={isInView} />

@@ -240,6 +240,33 @@
   @apply w-full h-full;
 }
 
+/* Ambient scene wrapper - persistent background */
+.ambient-scene-wrapper {
+  @apply fixed inset-0 z-0 pointer-events-none;
+}
+
+.ambient-scene-wrapper canvas {
+  @apply w-full h-full;
+}
+
+/* Micro-scene wrapper for chapter-specific 3D */
+.micro-scene-wrapper {
+  @apply absolute inset-0 pointer-events-none;
+}
+
+/* Floating 3D element containers */
+.floating-3d-left {
+  @apply absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-[60vh];
+}
+
+.floating-3d-right {
+  @apply absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-[60vh];
+}
+
+.floating-3d-center {
+  @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-[70vh];
+}
+
 /* Sticky scroll container */
 .sticky-container {
   @apply relative;
@@ -280,3 +307,27 @@
   background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.05), transparent);
   animation: light-sweep 8s ease-in-out infinite;
 }
+
+/* Holographic glow effect */
+@keyframes holo-glow {
+  0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(30deg) brightness(1.2); }
+}
+
+.holo-glow {
+  animation: holo-glow 5s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(-2deg); }
+}
+
+.float-slow { animation: float-slow 8s ease-in-out infinite; }
+.float-medium { animation: float-medium 6s ease-in-out infinite; }
