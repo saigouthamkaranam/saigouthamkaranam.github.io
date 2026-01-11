@@ -118,7 +118,8 @@ export default function ProjectsChapter() {
   
   return (
     <section ref={containerRef} id="projects" className="relative py-32 md:py-48">
-      <div ref={sceneRef} className="absolute right-0 top-20 w-1/4 h-96 opacity-40 pointer-events-none hidden lg:block">
+      {/* Full section 3D background */}
+      <div ref={sceneRef} className="absolute inset-0 opacity-60 pointer-events-none">
         {!reducedMotion && <Suspense fallback={null}><ProjectsScene inView={isInView} /></Suspense>}
       </div>
       
