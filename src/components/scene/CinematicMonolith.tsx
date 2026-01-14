@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { MeshTransmissionMaterial, Float } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { lerp, mapRange, easeInOutCubic } from '@/lib/scroll';
 
@@ -9,107 +9,85 @@ interface MonolithProps {
   reducedMotion: boolean;
 }
 
-// Custom geometry for morph targets
-function createMorphTargets(geometry: THREE.BufferGeometry) {
-  const positionAttribute = geometry.getAttribute('position');
-  const count = positionAttribute.count;
+// Create morph target geometry for the bending effect
+function createMorphTargets(geometry: THREE.BoxGeometry) {
+  const position = geometry.attributes.position;
+  const count = position.count;
   
-  // Morph target 1: Bent/warped
+  // Bent morph target
   const bentPositions = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    const x = positionAttribute.getX(i);
-    const y = positionAttribute.getY(i);
-    const z = positionAttribute.getZ(i);
+    const x = position.getX(i);
+    const y = position.getY(i);
+    const z = position.getZ(i);
     
-    // Apply bend based on Y position
-    const bendFactor = Math.sin(y * 0.5) * 0.3;
-    bentPositions[i * 3] = x + bendFactor;
+    const bendAmount = Math.sin((y + 2) * 0.5) * 0.3;
+    bentPositions[i * 3] = x + bendAmount;
     bentPositions[i * 3 + 1] = y;
-    bentPositions[i * 3 + 2] = z + Math.cos(y * 0.3) * 0.15;
+    bentPositions[i * 3 + 2] = z + Math.cos((y + 2) * 0.3) * 0.15;
   }
   
-  // Morph target 2: Twisted
+  // Twisted morph target
   const twistedPositions = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    const x = positionAttribute.getX(i);
-    const y = positionAttribute.getY(i);
-    const z = positionAttribute.getZ(i);
+    const x = position.getX(i);
+    const y = position.getY(i);
+    const z = position.getZ(i);
     
-    // Apply twist based on Y position
-    const angle = y * 0.4;
+    const angle = y * 0.2;
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
-    
     twistedPositions[i * 3] = x * cos - z * sin;
     twistedPositions[i * 3 + 1] = y;
     twistedPositions[i * 3 + 2] = x * sin + z * cos;
   }
   
   geometry.morphAttributes.position = [
-    new THREE.Float32BufferAttribute(bentPositions, 3),
-    new THREE.Float32BufferAttribute(twistedPositions, 3),
+    new THREE.BufferAttribute(bentPositions, 3),
+    new THREE.BufferAttribute(twistedPositions, 3)
   ];
-  
-  return geometry;
 }
 
-// Main monolith slab
+// Main monolith core with glass/chrome material
 function MonolithCore({ scrollProgress, reducedMotion }: MonolithProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
   
-  // Create geometry with morph targets
   const geometry = useMemo(() => {
-    const geo = new THREE.BoxGeometry(1.4, 2.8, 0.25, 32, 64, 8);
-    return createMorphTargets(geo);
+    const geo = new THREE.BoxGeometry(1.2, 3, 0.15, 32, 64, 8);
+    createMorphTargets(geo);
+    return geo;
   }, []);
-  
-  // Animation targets
-  const targetMorph = useRef([0, 0]);
-  const currentMorph = useRef([0, 0]);
   
   useFrame((state, delta) => {
     if (!meshRef.current || reducedMotion) return;
     
+    const mesh = meshRef.current;
     const time = state.clock.elapsedTime;
     
-    // Chapter-based morph influences
-    // Chapter 1 (0-0.15): Object emerges
-    // Chapter 2 (0.15-0.35): Bend/warp (philosophy)
-    // Chapter 3 (0.35-0.55): Twist transformation (skills)
-    // Chapter 4 (0.55-0.75): Return to refined form (projects)
-    // Chapter 5 (0.75-1.0): Calm, precise (experience/contact)
-    
-    if (scrollProgress < 0.15) {
-      targetMorph.current = [0, 0];
-    } else if (scrollProgress < 0.35) {
-      const phase = easeInOutCubic((scrollProgress - 0.15) / 0.2);
-      targetMorph.current = [phase * 0.8, 0];
-    } else if (scrollProgress < 0.55) {
-      const phase = easeInOutCubic((scrollProgress - 0.35) / 0.2);
-      targetMorph.current = [0.8 * (1 - phase), phase * 0.6];
-    } else if (scrollProgress < 0.75) {
-      const phase = easeInOutCubic((scrollProgress - 0.55) / 0.2);
-      targetMorph.current = [0, 0.6 * (1 - phase)];
+    // Morph target animation based on scroll
+    if (scrollProgress > 0.35 && scrollProgress < 0.55) {
+      const phase = (scrollProgress - 0.35) / 0.2;
+      mesh.morphTargetInfluences![0] = lerp(
+        mesh.morphTargetInfluences![0],
+        easeInOutCubic(phase) * 0.6,
+        1 - Math.pow(0.1, delta)
+      );
+      mesh.morphTargetInfluences![1] = lerp(
+        mesh.morphTargetInfluences![1],
+        easeInOutCubic(phase) * 0.3,
+        1 - Math.pow(0.1, delta)
+      );
     } else {
-      targetMorph.current = [0, 0];
+      mesh.morphTargetInfluences![0] = lerp(mesh.morphTargetInfluences![0], 0, 1 - Math.pow(0.05, delta));
+      mesh.morphTargetInfluences![1] = lerp(mesh.morphTargetInfluences![1], 0, 1 - Math.pow(0.05, delta));
     }
     
-    // Smooth interpolation
-    const lerpFactor = 1 - Math.pow(0.02, delta);
-    currentMorph.current[0] = lerp(currentMorph.current[0], targetMorph.current[0], lerpFactor);
-    currentMorph.current[1] = lerp(currentMorph.current[1], targetMorph.current[1], lerpFactor);
-    
-    // Apply morph targets
-    if (meshRef.current.morphTargetInfluences) {
-      meshRef.current.morphTargetInfluences[0] = currentMorph.current[0];
-      meshRef.current.morphTargetInfluences[1] = currentMorph.current[1];
-    }
-    
-    // Subtle breathing animation
+    // Material breathing effect
     if (materialRef.current) {
-      const breathe = Math.sin(time * 0.5) * 0.05 + 0.95;
-      materialRef.current.envMapIntensity = breathe * 1.5;
+      const breathe = Math.sin(time * 0.5) * 0.02 + 0.98;
+      materialRef.current.metalness = 0.95 * breathe;
+      materialRef.current.clearcoat = 0.8 + Math.sin(time * 0.3) * 0.1;
     }
   });
   
@@ -117,50 +95,59 @@ function MonolithCore({ scrollProgress, reducedMotion }: MonolithProps) {
     <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
       <meshPhysicalMaterial
         ref={materialRef}
-        color="#0a0a0a"
+        color="#1a1a2e"
         metalness={0.95}
         roughness={0.05}
         clearcoat={1}
-        clearcoatRoughness={0.05}
+        clearcoatRoughness={0.1}
         reflectivity={1}
         envMapIntensity={1.5}
-        side={THREE.DoubleSide}
+        transparent
+        opacity={0.98}
       />
     </mesh>
   );
 }
 
-// Glass overlay layer
-function GlassLayer({ scrollProgress, reducedMotion, offset = 0 }: MonolithProps & { offset?: number }) {
+// Glass layers that separate during skills chapter
+function GlassLayer({ index, scrollProgress, reducedMotion }: { 
+  index: number; 
+  scrollProgress: number;
+  reducedMotion: boolean;
+}) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const baseOffset = (index - 2) * 0.08;
   
   useFrame((state, delta) => {
     if (!meshRef.current || reducedMotion) return;
     
-    // Explode effect during skills chapter
-    let targetZ = 0.14 + offset * 0.08;
+    let targetZ = baseOffset;
+    let targetOpacity = 0.15;
     
-    if (scrollProgress > 0.35 && scrollProgress < 0.55) {
-      const phase = easeInOutCubic((scrollProgress - 0.35) / 0.2);
-      targetZ = 0.14 + offset * 0.08 + phase * (0.3 + offset * 0.2);
+    if (scrollProgress > 0.55 && scrollProgress < 0.75) {
+      const phase = (scrollProgress - 0.55) / 0.2;
+      const separation = easeInOutCubic(phase);
+      targetZ = baseOffset + (index - 2) * separation * 0.4;
+      targetOpacity = 0.08 + separation * 0.12;
     }
     
-    const lerpFactor = 1 - Math.pow(0.02, delta);
-    meshRef.current.position.z = lerp(meshRef.current.position.z, targetZ, lerpFactor);
+    meshRef.current.position.z = lerp(meshRef.current.position.z, targetZ, 1 - Math.pow(0.1, delta));
+    
+    const material = meshRef.current.material as THREE.MeshPhysicalMaterial;
+    material.opacity = lerp(material.opacity, targetOpacity, 1 - Math.pow(0.1, delta));
   });
   
   return (
-    <mesh ref={meshRef} position={[0, 0, 0.14 + offset * 0.08]} castShadow>
-      <boxGeometry args={[1.3, 2.7, 0.02, 16, 32, 1]} />
-      <MeshTransmissionMaterial
-        transmission={0.96}
-        thickness={0.3}
-        roughness={0.02}
-        chromaticAberration={0.02}
-        ior={1.5}
-        color={offset === 0 ? "#ffffff" : offset === 1 ? "#e0f0ff" : "#f0e0ff"}
-        distortionScale={0}
-        temporalDistortion={0}
+    <mesh ref={meshRef} position={[0, 0, baseOffset]}>
+      <boxGeometry args={[1.15, 2.9, 0.02]} />
+      <meshPhysicalMaterial
+        color="#2a2a4e"
+        metalness={0.3}
+        roughness={0.1}
+        transmission={0.9}
+        thickness={0.5}
+        transparent
+        opacity={0.15}
       />
     </mesh>
   );
@@ -175,8 +162,6 @@ function AccentLight({ scrollProgress }: { scrollProgress: number }) {
     if (!materialRef.current) return;
     
     const time = state.clock.elapsedTime;
-    
-    // Pulse intensity based on scroll
     const baseIntensity = 1.5;
     const pulseIntensity = Math.sin(time * 2) * 0.3;
     const scrollBoost = scrollProgress > 0.5 ? 0.5 : 0;
@@ -219,13 +204,11 @@ function Fragment({
   useFrame((state, delta) => {
     if (!meshRef.current || reducedMotion) return;
     
-    // Explode during skills chapter
     const isSkillsChapter = scrollProgress > 0.35 && scrollProgress < 0.55;
     const phase = isSkillsChapter 
       ? easeInOutCubic((scrollProgress - 0.35) / 0.2)
       : 0;
     
-    // Each fragment moves outward
     const explodeDistance = 0.8 + index * 0.2;
     const angle = (index / 4) * Math.PI * 2;
     
@@ -235,8 +218,6 @@ function Fragment({
     
     const lerpFactor = 1 - Math.pow(0.02, delta);
     meshRef.current.position.lerp(targetPos.current, lerpFactor);
-    
-    // Subtle rotation during explosion
     meshRef.current.rotation.y = phase * Math.PI * 0.25 * (index % 2 === 0 ? 1 : -1);
   });
   
@@ -255,11 +236,10 @@ function Fragment({
   );
 }
 
-// Main monolith group with all elements
+// Main monolith component
 export default function CinematicMonolith({ scrollProgress, reducedMotion }: MonolithProps) {
   const groupRef = useRef<THREE.Group>(null);
   
-  // Position/rotation/scale targets
   const targetRotation = useRef({ x: 0, y: 0, z: 0 });
   const targetPosition = useRef({ x: 0, y: 0, z: 0 });
   const targetScale = useRef(1);
@@ -282,7 +262,7 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
         targetRotation.current.y = phase * 0.3;
         targetScale.current = mapRange(phase, 0, 1, 0.5, 1);
       }
-      // Chapter 2 (0.15-0.35): Side profile with bend
+      // Chapter 2 (0.15-0.35): Side profile with rotation
       else if (scrollProgress < 0.35) {
         const phase = easeInOutCubic((scrollProgress - 0.15) / 0.2);
         targetPosition.current.z = 0;
@@ -291,7 +271,7 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
         targetRotation.current.x = Math.sin(time * 0.3) * 0.05;
         targetScale.current = 1;
       }
-      // Chapter 3 (0.35-0.55): Skills - exploded view
+      // Chapter 3 (0.35-0.55): Skills - morphing phase
       else if (scrollProgress < 0.55) {
         const phase = easeInOutCubic((scrollProgress - 0.35) / 0.2);
         targetPosition.current.x = mapRange(phase, 0, 1, 0.5, 0);
@@ -299,7 +279,7 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
         targetRotation.current.x = mapRange(phase, 0, 1, 0, -0.15);
         targetScale.current = 1 + phase * 0.1;
       }
-      // Chapter 4 (0.55-0.75): Projects - stabilize
+      // Chapter 4 (0.55-0.75): Projects - exploded layers
       else if (scrollProgress < 0.75) {
         const phase = easeInOutCubic((scrollProgress - 0.55) / 0.2);
         targetPosition.current.x = 0;
@@ -307,7 +287,7 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
         targetRotation.current.x = mapRange(phase, 0, 1, -0.15, 0);
         targetScale.current = 1.1 - phase * 0.1;
       }
-      // Chapter 5 (0.75-1.0): Calm & precise
+      // Chapter 5 (0.75-1.0): Final stabilization
       else {
         const phase = easeInOutCubic((scrollProgress - 0.75) / 0.25);
         targetRotation.current.y = 2.3 + phase * 0.5;
@@ -317,7 +297,6 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
       }
     }
     
-    // Smooth interpolation
     const lerpFactor = 1 - Math.pow(0.015, delta);
     
     groupRef.current.rotation.x = lerp(groupRef.current.rotation.x, targetRotation.current.x, lerpFactor);
@@ -333,7 +312,6 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
     groupRef.current.scale.setScalar(newScale);
   });
   
-  // Fragment positions
   const fragments = useMemo(() => [
     { position: [-0.4, 0.8, 0.2] as [number, number, number], rotation: [0, 0, 0.1] as [number, number, number] },
     { position: [0.4, 0.8, 0.2] as [number, number, number], rotation: [0, 0, -0.1] as [number, number, number] },
@@ -352,9 +330,10 @@ export default function CinematicMonolith({ scrollProgress, reducedMotion }: Mon
         {/* Core monolith */}
         <MonolithCore scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
         
-        {/* Glass layers that separate during skills chapter */}
-        <GlassLayer scrollProgress={scrollProgress} reducedMotion={reducedMotion} offset={0} />
-        <GlassLayer scrollProgress={scrollProgress} reducedMotion={reducedMotion} offset={1} />
+        {/* Glass layers */}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <GlassLayer key={i} index={i} scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+        ))}
         
         {/* Accent light */}
         <AccentLight scrollProgress={scrollProgress} />
