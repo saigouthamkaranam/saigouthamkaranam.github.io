@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { useLenis } from '@/hooks/use-lenis';
 import Navigation from '@/components/Navigation';
 import ProductScene from '@/components/scene/ProductScene';
-import AmbientScene from '@/components/scene/AmbientScene';
 import HeroChapter from '@/components/chapters/HeroChapter';
 import AboutChapter from '@/components/chapters/AboutChapter';
 import SkillsChapter from '@/components/chapters/SkillsChapter';
@@ -19,12 +18,7 @@ const Index = () => {
       {/* Grain texture overlay */}
       <div className="grain-overlay" />
       
-      {/* Ambient 3D layer - persistent background */}
-      <Suspense fallback={null}>
-        <AmbientScene />
-      </Suspense>
-      
-      {/* Main 3D Scene - hero object */}
+      {/* Main 3D Scene - premium cinematic monolith only */}
       <Suspense fallback={null}>
         <ProductScene />
       </Suspense>

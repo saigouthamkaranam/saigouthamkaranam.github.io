@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import RoleAnimator from '@/components/RoleAnimator';
 
 export default function HeroChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,14 +34,15 @@ export default function HeroChapter() {
             style={{ opacity: titleOpacity, y: titleY }}
             className="mb-8"
           >
-            <motion.p
+            {/* Role animator - above the name */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="text-sm md:text-base font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6"
+              className="mb-6"
             >
-              Software Engineer
-            </motion.p>
+              <RoleAnimator />
+            </motion.div>
             
             <motion.h1
               initial={{ opacity: 0, scale: 0.9 }}
