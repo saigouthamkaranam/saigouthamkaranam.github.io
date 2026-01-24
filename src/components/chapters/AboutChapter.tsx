@@ -30,14 +30,8 @@ export default function AboutChapter() {
       id="about"
       className="relative min-h-[150vh]"
     >
-      {/* 3D Micro-scene - Full section background */}
-      <div ref={sceneRef} className="absolute inset-0 opacity-80 pointer-events-none">
-        {!reducedMotion && (
-          <Suspense fallback={null}>
-            <AboutScene inView={isInView} />
-          </Suspense>
-        )}
-      </div>
+      {/* Scene ref for scroll tracking */}
+      <div ref={sceneRef} className="absolute inset-0 pointer-events-none" />
       
       <div className="sticky top-0 h-screen flex items-center">
         <motion.div 
