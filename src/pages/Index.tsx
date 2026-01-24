@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { useLenis } from '@/hooks/use-lenis';
 import Navigation from '@/components/Navigation';
 import ProductScene from '@/components/scene/ProductScene';
+import ParticlesBackground from '@/components/ParticlesBackground';
 import HeroChapter from '@/components/chapters/HeroChapter';
 import AboutChapter from '@/components/chapters/AboutChapter';
 import SkillsChapter from '@/components/chapters/SkillsChapter';
@@ -15,6 +16,9 @@ const Index = () => {
 
   return (
     <main className="relative min-h-screen bg-background overflow-x-hidden">
+      {/* Star Wars style particle background */}
+      <ParticlesBackground />
+      
       {/* Grain texture overlay */}
       <div className="grain-overlay" />
       
