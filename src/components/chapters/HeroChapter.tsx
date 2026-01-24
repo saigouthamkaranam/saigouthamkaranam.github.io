@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import RoleAnimator from '@/components/RoleAnimator';
+import gouthamPortrait from '@/assets/goutham-portrait.jpg';
 
 export default function HeroChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,24 @@ export default function HeroChapter() {
         
         {/* Content */}
         <div className="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-12 text-center">
+          {/* Portrait image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            style={{ opacity: titleOpacity }}
+            className="mb-8"
+          >
+            <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(var(--highlight-blue))] to-[hsl(var(--highlight-purple))] opacity-50 blur-xl animate-pulse" />
+              <img
+                src={gouthamPortrait}
+                alt="Goutham - Developer"
+                className="relative w-full h-full rounded-full object-cover border-2 border-border/50 shadow-2xl"
+              />
+            </div>
+          </motion.div>
+          
           {/* Main title - massive Apple-style */}
           <motion.div
             style={{ opacity: titleOpacity, y: titleY }}
