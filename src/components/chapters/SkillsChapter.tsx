@@ -48,14 +48,8 @@ export default function SkillsChapter() {
       id="skills"
       className="relative min-h-[180vh]"
     >
-      {/* 3D Micro-scene */}
-      <div ref={sceneRef} className="absolute left-0 top-1/3 w-1/4 h-1/2 opacity-50 pointer-events-none hidden lg:block">
-        {!reducedMotion && (
-          <Suspense fallback={null}>
-            <SkillsScene scrollProgress={scrollYProgress.get()} inView={isInView} />
-          </Suspense>
-        )}
-      </div>
+      {/* Scene ref for scroll tracking */}
+      <div ref={sceneRef} className="absolute inset-0 pointer-events-none" />
       
       <div className="sticky top-0 min-h-screen flex items-center py-20">
         <motion.div 
