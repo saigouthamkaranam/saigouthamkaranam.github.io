@@ -44,14 +44,27 @@ export default function HeroChapter() {
               <RoleAnimator />
             </motion.div>
             
-            <motion.h1
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-tight"
+              className="flex flex-col items-center"
             >
-              <span className="gradient-text-subtle">Goutham</span>
-            </motion.h1>
+              {/* Sai - small above */}
+              <span className="text-sm sm:text-base md:text-lg text-muted-foreground tracking-[0.3em] uppercase mb-1">
+                Sai
+              </span>
+              
+              {/* Goutham - main name */}
+              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-tight">
+                <span className="gradient-text-subtle">Goutham</span>
+              </h1>
+              
+              {/* Karanam - small below */}
+              <span className="text-sm sm:text-base md:text-lg text-muted-foreground tracking-[0.3em] uppercase mt-1">
+                Karanam
+              </span>
+            </motion.div>
           </motion.div>
           
           {/* Subtitle - reveals on scroll */}
