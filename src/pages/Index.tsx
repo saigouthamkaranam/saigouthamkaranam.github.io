@@ -6,8 +6,9 @@ import ParticlesBackground from '@/components/ParticlesBackground';
 import HeroChapter from '@/components/chapters/HeroChapter';
 import AboutChapter from '@/components/chapters/AboutChapter';
 import SkillsChapter from '@/components/chapters/SkillsChapter';
-import ProjectsChapter from '@/components/chapters/ProjectsChapter';
 import ExperienceChapter from '@/components/chapters/ExperienceChapter';
+import EducationChapter from '@/components/chapters/EducationChapter';
+import ProjectsChapter from '@/components/chapters/ProjectsChapter';
 import ContactChapter from '@/components/chapters/ContactChapter';
 import FooterMinimal from '@/components/FooterMinimal';
 
@@ -35,8 +36,9 @@ const Index = () => {
         <HeroChapter />
         <AboutChapter />
         <SkillsChapter />
-        <ProjectsChapter />
         <ExperienceChapter />
+        <EducationChapter />
+        <ProjectsChapter />
         <ContactChapter />
         <FooterMinimal />
       </div>

@@ -3,36 +3,39 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 const experiences = [
   {
+    role: 'Software Engineer – AI & Automation',
+    company: "Sam's Club",
+    location: 'Bentonville, AR',
+    period: 'Dec 2024 – Present',
+    description: 'Building AI-driven automation platforms for incident management and reliability.',
+    highlights: [
+      'Built AI-driven incident triage system (Python, LangChain, OpenAI APIs), reducing manual analysis by 60% and improving MTTR by 45%',
+      'Developed alerts automation bot reducing alert fatigue by 70% and improving on-call efficiency',
+      'Delivered Grafana/Splunk dashboards for SLOs and recovery metrics, maintaining 99.99% availability',
+    ],
+  },
+  {
     role: 'Software Engineer',
-    company: 'Enterprise Tech Corp',
-    period: '2022 – Present',
-    description: 'Building automation platforms and reliability tooling for cloud infrastructure.',
+    company: 'ADP (Automatic Data Processing)',
+    location: '',
+    period: 'Nov 2021 – Dec 2022',
+    description: 'Automated data migration workflows and built ETL pipelines for enterprise clients.',
     highlights: [
-      'Designed incident management system reducing MTTR by 40%',
-      'Built ML-powered ticket classification serving 50K+ requests monthly',
-      'Led migration of legacy services to Kubernetes',
+      'Automated data migration workflows for 50+ enterprise clients, improving throughput by 40%',
+      'Built 20+ reusable ETL modules, reducing duplicated logic by 70%',
+      'Optimized SQL queries on 1M+ row datasets, improving accuracy by 35% and performance by 60%',
     ],
   },
   {
-    role: 'Backend Developer',
-    company: 'FinTech Startup',
-    period: '2021 – 2022',
-    description: 'Developed core payment processing APIs and fraud detection systems.',
+    role: 'Software Engineer – Full Stack',
+    company: 'Infinite Infolab',
+    location: '',
+    period: 'Oct 2019 – Nov 2021',
+    description: 'Built and scaled production-grade payroll and HR platform serving 5,000+ users.',
     highlights: [
-      'Built real-time payment gateway processing $2M+ daily',
-      'Implemented fraud detection reducing chargebacks by 35%',
-      'Optimized database queries improving response time by 60%',
-    ],
-  },
-  {
-    role: 'Software Engineering Intern',
-    company: 'Cloud Solutions Inc',
-    period: '2020 – 2021',
-    description: 'Contributed to developer tools and internal automation systems.',
-    highlights: [
-      'Developed CI/CD pipeline templates used by 20+ teams',
-      'Built monitoring dashboards for infrastructure health',
-      'Automated deployment workflows saving 10+ hours weekly',
+      'Designed 15+ RESTful APIs using Java and Spring Boot for core business workflows',
+      'Developed React/Redux frontend components, reducing page load times by 35%',
+      'Implemented CI/CD pipelines using Jenkins and Docker, reducing deployment errors by 90%',
     ],
   },
 ];
