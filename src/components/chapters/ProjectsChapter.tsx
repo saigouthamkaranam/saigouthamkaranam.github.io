@@ -1,10 +1,7 @@
-import { useRef, Suspense } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
-import { useInView } from '@/hooks/use-in-view';
-import { prefersReducedMotion } from '@/lib/motion';
 import { useTilt } from '@/hooks/use-tilt';
-import ProjectsScene from '@/components/scene/microscene/ProjectsScene';
 
 const projects = [
   {
@@ -108,8 +105,6 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
 export default function ProjectsChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [sceneRef, isInView] = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const reducedMotion = typeof window !== 'undefined' && prefersReducedMotion();
   
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
   const labelOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);
@@ -118,11 +113,6 @@ export default function ProjectsChapter() {
   
   return (
     <section ref={containerRef} id="projects" className="relative py-32 md:py-48">
-      {/* Full section 3D background */}
-      <div ref={sceneRef} className="absolute inset-0 opacity-60 pointer-events-none">
-        {!reducedMotion && <Suspense fallback={null}><ProjectsScene inView={isInView} /></Suspense>}
-      </div>
-      
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <motion.p style={{ opacity: labelOpacity }} className="text-sm tracking-[0.3em] uppercase text-muted-foreground/60 mb-8">Work</motion.p>
         <motion.h2 style={{ opacity: titleOpacity, y: titleY }} className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.1] mb-20 max-w-3xl">
