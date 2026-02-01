@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 const experiences = [
   {
-    role: 'Software Engineer – AI & Automation',
+    role: 'Software Engineer – SRE (AI & Automation)',
     company: "Sam's Club",
     location: 'Bentonville, AR',
     period: 'Dec 2024 – Present',
