@@ -47,7 +47,7 @@ export default function Navigation() {
                 </a>
               ))}
               <a
-                href="/resume.pdf"
+                href="https://drive.google.com/file/d/16O9ytRZDNEU_zmizNck9eTj7UEtcsGPt/view?usp=drive_link"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-2 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-90 transition-opacity"

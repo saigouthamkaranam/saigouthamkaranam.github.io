@@ -92,7 +92,7 @@ export default function HeroSection() {
               View Projects
             </motion.a>
             <motion.a
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/16O9ytRZDNEU_zmizNck9eTj7UEtcsGPt/view?usp=drive_link"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-2 px-8 py-4 rounded-full glass-card font-semibold hover:border-primary/50 transition-all"

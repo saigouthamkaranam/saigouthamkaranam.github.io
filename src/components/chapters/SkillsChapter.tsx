@@ -5,26 +5,78 @@ import { prefersReducedMotion } from '@/lib/motion';
 import SkillsScene from '@/components/scene/microscene/SkillsScene';
 const skills = [
   {
+    category: 'Frontend',
+    items: [
+      'React',
+      'Next.js',
+      'TypeScript',
+      'Tailwind CSS',
+    ],
+    description: 'Building modern, responsive, and user-friendly web interfaces',
+  },
+  {
     category: 'Backend',
-    items: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Node.js'],
-    description: 'Building robust APIs and microservices',
+    items: [
+      'Python',
+      'FastAPI',
+      'Java',
+      'Spring Boot',
+      'Node.js',
+      'REST APIs',
+      'JWT & OAuth2'
+    ],
+    description: 'Designing and implementing scalable backend services and APIs',
   },
   {
     category: 'Cloud & Infra',
-    items: ['AWS', 'Azure', 'Docker', 'Kubernetes', 'Terraform'],
-    description: 'Deploying and scaling distributed systems',
-  },
-  {
-    category: 'Data',
-    items: ['PostgreSQL', 'MongoDB', 'Redis', 'Kafka', 'SQL'],
-    description: 'Managing data at scale',
+    items: [
+      'AWS',
+      'Azure',
+      'Docker',
+      'Kubernetes',
+      'Terraform',
+    ],
+    description: 'Deploying, automating, and operating cloud-native applications',
   },
   {
     category: 'AI & ML',
-    items: ['LLM APIs', 'LangChain', 'Pandas', 'scikit-learn'],
-    description: 'Intelligent automation and tooling',
+    items: [
+      'LLM APIs',
+      'Prompt Engineering',
+      'LangChain',
+      'HuggingFace', 
+      'Transformers',
+      'scikit-learn',
+      'Pandas',
+      'NumPy'
+    ],
+    description: 'Building AI-powered features and intelligent automation systems',
+  },
+  {
+    category: 'Data',
+    items: [
+      'PostgreSQL',
+      'MongoDB',
+      'Redis',
+      'Kafka',
+      'SQL',
+    ],
+    description: 'Designing reliable data stores and streaming pipelines',
+  },
+  {
+    category: 'Tools',
+    items: [
+      'Git & GitHub',
+      'Postman',
+      'VS Code',
+      'Jira',
+      'Prometheus',
+      'Grafana'
+    ],
+    description: 'Using modern tools for development, collaboration, and observability',
   },
 ];
+
 
 export default function SkillsChapter() {
   const containerRef = useRef<HTMLDivElement>(null);

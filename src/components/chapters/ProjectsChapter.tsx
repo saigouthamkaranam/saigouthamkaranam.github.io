@@ -5,45 +5,66 @@ import { useTilt } from '@/hooks/use-tilt';
 
 const projects = [
   {
-    title: 'SamsCash Issue Resolver',
-    description: 'Automated resolution system for payment and refund issues in retail banking.',
-    impact: ['Reduced resolution time by 70%', 'Processed 10K+ tickets monthly', 'Integrated with core banking APIs'],
-    stack: ['Python', 'FastAPI', 'PostgreSQL', 'Redis', 'AWS'],
-    github: '#',
-    demo: '#',
-  },
-  {
-    title: 'Slack Incident Summarizer',
-    description: 'AI-powered bot that summarizes incident threads and generates postmortem drafts.',
-    impact: ['Saved 5+ hours per incident', 'Auto-generated actionable summaries', 'Integrated with PagerDuty & Jira'],
-    stack: ['Node.js', 'OpenAI API', 'Slack SDK', 'MongoDB'],
-    github: '#',
-    demo: '#',
-  },
-  {
     title: 'ServiceNow Ticket Categorizer',
     description: 'ML-based classification tool for routing support tickets to correct teams.',
-    impact: ['95% classification accuracy', 'Reduced misrouted tickets by 60%', 'Processed 50K+ tickets'],
+    impact: [
+      'Improved ticket routing accuracy',
+      'Reduced manual triage effort',
+      'Streamlined support workflows'
+    ],
     stack: ['Python', 'scikit-learn', 'FastAPI', 'ServiceNow API'],
-    github: '#',
+    github: 'https://github.com/saigouthamkaranam',
   },
   {
     title: 'SentiWise',
     description: 'Real-time sentiment analysis dashboard for customer feedback streams.',
-    impact: ['Analyzed 100K+ reviews', 'Real-time alerting system', 'Multi-language support'],
+    impact: [
+      'Categorized customer feedback by sentiment',
+      'Surfaced negative feedback for quicker review',
+      'Reduced manual effort in feedback analysis'
+    ],
     stack: ['React', 'Python', 'HuggingFace', 'Kafka'],
-    github: '#',
+    github: 'https://github.com/saigouthamkaranam/SentiWise',
     demo: '#',
   },
   {
     title: 'Recipe Diaries',
     description: 'Full-stack recipe sharing platform with personalized recommendations.',
-    impact: ['5K+ active users', 'AI-powered suggestions', 'Mobile-first design'],
+    impact: [
+      'Delivered a complete full-stack application',
+      'Enabled personalized recipe discovery',
+      'Improved usability through mobile-first design'
+    ],
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind'],
-    github: '#',
+    github: 'https://github.com/saigouthamkaranam/RecipeDiaries',
+    demo: '#',
+  },
+  {
+    title: 'Job Application Tracker',
+    description: 'Productivity tool to track, manage, and analyze job applications.',
+    impact: [
+      'Centralized job application tracking',
+      'Improved visibility across application stages',
+      'Reduced missed follow-ups'
+    ],
+    stack: ['Next.js', 'FastAPI', 'PostgreSQL', 'Tailwind'],
+    github: 'https://github.com/saigouthamkaranam',
+    demo: '#',
+  },
+  {
+    title: 'ChatGPT To-Do List',
+    description: 'AI-assisted task management tool using natural language inputs.',
+    impact: [
+      'Converted natural language into structured tasks',
+      'Simplified daily task planning',
+      'Improved task clarity'
+    ],
+    stack: ['React', 'Node.js', 'OpenAI API'],
+    github: 'https://github.com/saigouthamkaranam',
     demo: '#',
   },
 ];
+
 
 function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   const tilt = useTilt({ maxTilt: 5, scale: 1.01 });
@@ -91,11 +112,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           <a href={project.github} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground border border-border/50 hover:border-border transition-colors" target="_blank" rel="noopener noreferrer">
             <Github size={16} /> Code
           </a>
-          {project.demo && (
+          {/* {project.demo && (
             <a href={project.demo} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-90 transition-opacity" target="_blank" rel="noopener noreferrer">
               <ExternalLink size={16} /> Demo
             </a>
-          )}
+          )} */}
         </div>
       </div>
       <div className="mt-16 md:mt-24 h-px bg-gradient-to-r from-transparent via-border to-transparent" />

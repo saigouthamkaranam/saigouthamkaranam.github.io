@@ -2,16 +2,26 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { GraduationCap } from 'lucide-react';
 
-const education = {
-  degree: 'M.S. Computer Science',
-  school: 'University of North Carolina at Charlotte',
-  location: 'Charlotte, NC',
-  period: 'Jan 2023 – May 2024',
-  highlights: [
-    'Client Support Technician — supported IT infrastructure, user systems, and service desk operations.',
-    'Graduate Assistant for DBMS — assisted with coursework, labs, and academic support activities.',
-  ],
-};
+const education = [
+  {
+    degree: 'Master of Science in Computer Science',
+    school: 'University of North Carolina at Charlotte',
+    location: 'Charlotte, NC',
+    highlights: [
+      'Client Support Technician — supported IT infrastructure, user systems, and service desk operations.',
+      'Graduate Assistant for DBMS — assisted with coursework, labs, and academic support activities.',
+    ],
+  },
+  {
+    degree: 'Bachelors of Technology in Electronics & Computer Engineering',
+    school: 'J.B. Institute of Engineering & Technology',
+    location: 'Hyderabad, India',
+    highlights: [
+      'Co Founder & President — Makers JBIET: led a student organization focused on innovation, projects, and tech events.',
+      'Participated in coding competitions and hackathons, honing problem-solving and teamwork skills.',
+    ],
+  },
+];
 
 export default function EducationChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -49,47 +59,47 @@ export default function EducationChapter() {
           <span className="gradient-text-subtle">foundation.</span>
         </motion.h2>
         
-        {/* Education card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true, margin: "-10%" }}
-          className="relative pl-8 md:pl-12"
-        >
-          {/* Icon */}
-          <div className="absolute left-0 top-0 w-8 h-8 flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-foreground" />
-          </div>
-          
-          {/* Period */}
-          <p className="text-sm tracking-wide text-muted-foreground mb-2">
-            {education.period}
-          </p>
-          
-          {/* Degree */}
-          <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-1">
-            {education.degree}
-          </h3>
-          
-          {/* School & Location */}
-          <p className="text-muted-foreground mb-6">
-            {education.school}, {education.location}
-          </p>
-          
-          {/* Highlights */}
-          <ul className="space-y-3">
-            {education.highlights.map((highlight, j) => (
-              <li 
-                key={j} 
-                className="flex items-start gap-3 text-sm text-muted-foreground"
-              >
-                <span className="w-1 h-1 rounded-full bg-accent mt-2 shrink-0" />
-                {highlight}
-              </li>
-            ))}
-          </ul>
-        </motion.div>
+        {/* Education cards */}
+        <div className="space-y-16 md:space-y-20">
+          {education.map((edu, i) => (
+            <motion.div
+              key={edu.school}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              viewport={{ once: true, margin: "-10%" }}
+              className="relative pl-8 md:pl-12"
+            >
+              {/* Icon */}
+              <div className="absolute left-0 top-0 w-8 h-8 flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 text-foreground" />
+              </div>
+              
+              {/* Degree */}
+              <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-1">
+                {edu.degree}
+              </h3>
+              
+              {/* School & Location */}
+              <p className="text-muted-foreground mb-6">
+                {edu.school}, {edu.location}
+              </p>
+              
+              {/* Highlights */}
+              <ul className="space-y-3">
+                {edu.highlights.map((highlight, j) => (
+                  <li 
+                    key={j} 
+                    className="flex items-start gap-3 text-sm text-muted-foreground"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-accent mt-2 shrink-0" />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

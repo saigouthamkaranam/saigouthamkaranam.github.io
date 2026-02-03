@@ -50,57 +50,11 @@ export default function ContactChapter() {
           style={{ opacity: contentOpacity }}
           className="text-lg md:text-xl text-muted-foreground mb-16 max-w-xl mx-auto"
         >
-          Open to opportunities in backend engineering, platform teams, and AI automation roles.
+          Open to opportunities in Full Stack web development, Software engineering, SRE / platform teams, and AI automation roles.
         </motion.p>
         
-        {/* Contact form */}
-        <motion.form
-          style={{ opacity: contentOpacity }}
-          onSubmit={handleSubmit}
-          className="space-y-4 mb-16"
-        >
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="p-8 md:p-12 rounded-2xl bg-secondary/30 border border-border/50 text-center"
-            >
-              <CheckCircle size={48} className="mx-auto mb-4 text-green-500" />
-              <p className="text-xl md:text-2xl font-semibold mb-2">Message sent!</p>
-              <p className="text-muted-foreground">I'll get back to you soon.</p>
-            </motion.div>
-          ) : (
-            <>
-              <div className="grid md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-secondary/30 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-border transition-colors"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-secondary/30 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-border transition-colors"
-                />
-              </div>
-              <textarea
-                placeholder="Your message"
-                required
-                rows={5}
-                className="w-full px-5 py-4 rounded-xl bg-secondary/30 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-border transition-colors resize-none"
-              />
-              <button 
-                type="submit" 
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-medium bg-foreground text-background hover:opacity-90 transition-opacity"
-              >
-                <Send size={18} />
-                Send Message
-              </button>
-            </>
-          )}
-        </motion.form>
+        {/* Contact form - temporarily disabled */}
+        {/* TODO: Re-enable when backend email functionality is set up */}
         
         {/* Resume CTA */}
         <motion.div
@@ -108,7 +62,7 @@ export default function ContactChapter() {
           className="mb-16"
         >
           <a
-            href="/resume.pdf"
+            href="https://drive.google.com/file/d/16O9ytRZDNEU_zmizNck9eTj7UEtcsGPt/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-lg text-muted-foreground hover:text-foreground transition-colors group"
@@ -124,14 +78,14 @@ export default function ContactChapter() {
           className="flex items-center justify-center gap-8"
         >
           <a
-            href="mailto:goutham@example.com"
+            href="mailto:s.goutham.karanam@gmail.com"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <Mail size={20} />
             <span className="text-sm">Email</span>
           </a>
           <a
-            href="https://github.com/goutham"
+            href="https://github.com/saigouthamkaranam"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -140,7 +94,7 @@ export default function ContactChapter() {
             <span className="text-sm">GitHub</span>
           </a>
           <a
-            href="https://linkedin.com/in/goutham"
+            href="https://linkedin.com/in/saigouthamk"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"

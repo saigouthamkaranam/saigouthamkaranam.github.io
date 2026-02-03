@@ -63,7 +63,7 @@ export default function AboutChapter() {
             className="max-w-2xl space-y-6"
           >
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              I build backend systems, automation platforms, and AI-powered tools that teams depend on every day. My focus is on reducing toil and improving operational efficiency at scale.
+              I build Full Stack systems, automation platforms, and AI-powered tools that teams depend on every day. My focus is on reducing toil and improving operational efficiency at scale.
             </p>
             
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
