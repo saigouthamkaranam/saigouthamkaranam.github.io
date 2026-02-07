@@ -16,6 +16,18 @@ const projects = [
     github: 'https://github.com/saigouthamkaranam',
   },
   {
+  title: 'WriteMyDM',
+  description: 'AI-powered assistant for generating personalized LinkedIn outreach messages.',
+  impact: [
+    'Generated personalized LinkedIn DMs',
+    'Reduced time spent drafting outreach messages',
+    'Improved consistency in professional communication'
+  ],
+  stack: ['React', 'FastAPI', 'OpenAI API'],
+  github: '#',
+  demo: '#',
+},
+  {
     title: 'SentiWise',
     description: 'Real-time sentiment analysis dashboard for customer feedback streams.',
     impact: [
